@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+
+import argparse
+import docker_manager
+import os
+
+parser = argparse.ArgumentParser(description='Docker Manager')
+parser.add_argument('--build', action='store_true')
+parser.add_argument('--force', action='store_true')
+parser.add_argument('--show', action='store_true')
+parser.add_argument('--verbose', action='store_true')
+parser.add_argument('images', type=str, nargs='*')
+
+args = parser.parse_args()
+
+org = os.environ['HUB_ORG']
+password = os.environ['HUB_PASSWORD']
+dm = docker_manager.DockerManager(org, password)
+
+if args.verbose:
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+
+if args.show:
+    dm.show_images(args.images)
+else:
+    parser.print_help()
